@@ -232,207 +232,208 @@
             { 'name': 'Sixteenth Rest', 'img': 'https://i.ibb.co/Y3xndJL/2.jpg' }
         ];
 
-        const stage5Cards = [
-            { 'name': 'pair1', 'img': 'https://i.ibb.co/NWX0nHS/image.jpg' },
-            { 'name': 'pair1', 'img': 'https://i.ibb.co/939bPRs/image.jpg' },
-            { 'name': 'pair2', 'img': 'https://i.ibb.co/4sz53jQ/image.jpg' },
-            { 'name': 'pair2', 'img': 'https://i.ibb.co/PhstBBs/image.jpg' },
-            { 'name': 'pair3', 'img': 'https://i.ibb.co/dPhQZk2/image.jpg' },
-            { 'name': 'pair3', 'img': 'https://i.ibb.co/zsycKvy/image.jpg' },
-            { 'name': 'pair4', 'img': 'https://i.ibb.co/YXG5ZTH/1.jpg' },
-            { 'name': 'pair4', 'img': 'https://i.ibb.co/VvDhnSh/1.jpg' },
-            { 'name': 'pair5', 'img': 'https://i.ibb.co/Y3xndJL/2.jpg' },
-            { 'name': 'pair5', 'img': 'https://i.ibb.co/zVFP0Gz/2.jpg' }
-        ];
+            const stage5Cards = [
+        { 'name': 'pair1', 'img': 'https://i.ibb.co/NWX0nHS/image.jpg' },
+        { 'name': 'pair1', 'img': 'https://i.ibb.co/939bPRs/image.jpg' },
+        { 'name': 'pair2', 'img': 'https://i.ibb.co/4sz53jQ/image.jpg' },
+        { 'name': 'pair2', 'img': 'https://i.ibb.co/PhstBBs/image.jpg' },
+        { 'name': 'pair3', 'img': 'https://i.ibb.co/dPhQZk2/image.jpg' },
+        { 'name': 'pair3', 'img': 'https://i.ibb.co/zsycKvy/image.jpg' },
+        { 'name': 'pair4', 'img': 'https://i.ibb.co/YXG5ZTH/1.jpg' },
+        { 'name': 'pair4', 'img': 'https://i.ibb.co/VvDhnSh/1.jpg' },
+        { 'name': 'pair5', 'img': 'https://i.ibb.co/Y3xndJL/2.jpg' },
+        { 'name': 'pair5', 'img': 'https://i.ibb.co/zVFP0Gz/2.jpg' }
+    ];
 
-        const stage6Cards = stage5Cards;
+    const stage6Cards = stage5Cards;
 
-        let currentStage = 1;
-        let gameGrid;
-        let firstCard = null;
-        let secondCard = null;
-        let lockBoard = false;
-        let mistakes = 0;
-        const maxMistakes = 5; // ตั้งค่าสูงสุดของการเปิดคู่ภาพผิด
-        const gameBoard = document.getElementById('gameBoard');
-        const nextStageButton = document.getElementById('nextStageButton');
-        const modal = document.getElementById('myModal');
-        const closeModal = document.getElementsByClassName('close')[0];
-        const stageInfo = document.getElementById('stageInfo');
-        const startGameButton = document.getElementById('startGameButton');
+    let currentStage = 1;
+    let gameGrid;
+    let firstCard = null;
+    let secondCard = null;
+    let lockBoard = false;
+    let mistakes = 0;
+    const maxMistakes = 5; // ตั้งค่าสูงสุดของการเปิดคู่ภาพผิด
+    const gameBoard = document.getElementById('gameBoard');
+    const nextStageButton = document.getElementById('nextStageButton');
+    const modal = document.getElementById('myModal');
+    const closeModal = document.getElementsByClassName('close')[0];
+    const stageInfo = document.getElementById('stageInfo');
+    const startGameButton = document.getElementById('startGameButton');
 
-        const stageDescriptions = {
-            1: 'ด่านที่ 1: ให้นักเรียนจับคู่ชื่อตัวโน้ตภาษาไทยให้ถูกต้อง',
-            2: 'ด่านที่ 2: ให้นักเรียนจับคู่ชื่อตัวโน้ตภาษาอังกฤษให้ถูกต้อง',
-            3: 'ด่านที่ 3: ให้นักเรียนจับคู่ชื่อภาษาไทยตัวหยุดโน้ตต่าง ๆ ให้ถูกต้อง',
-            4: 'ด่านที่ 4: ให้นักเรียนจับคู่ชื่อภาษาอังกฤษตัวหยุดโน้ตต่าง ๆ ให้ถูกต้อง',
-            5: 'ด่านที่ 5: ให้นักเรียนจับคู่รูปภาพตัวโน้ตและตัวหยุดตัวโน้ตต่าง ๆ ให้ถูกต้อง',
-            6: 'ด่านที่ 6: ให้นักเรียนเปิดภาพและจับคู่รูปภาพตัวโน้ตและตัวหยุดตัวโน้ตต่าง ๆ ให้ถูกต้อง'
-        };
+    const stageDescriptions = {
+        1: 'ด่าน 1: ความรู้เกี่ยวกับโน้ตตัวกลม ตัวขาว ตัวดำ และตัวเขบ็ต',
+        2: 'ด่าน 2: ความรู้เกี่ยวกับโน้ตตัวกลม ตัวขาว ตัวดำ ตัวเขบ็ต และโน้ตประจุด',
+        3: 'ด่าน 3: ความรู้เกี่ยวกับตัวหยุดโน้ตต่างๆ เช่น ตัวหยุดโน้ตตัวกลม ตัวขาว และตัวดำ',
+        4: 'ด่าน 4: ความรู้เกี่ยวกับตัวหยุดโน้ตต่างๆ เช่น ตัวหยุดโน้ตเขบ็ต',
+        5: 'ด่าน 5: การจับคู่รูปภาพของตัวโน้ตและตัวหยุด',
+        6: 'ด่าน 6: การจับคู่รูปภาพของตัวโน้ตและตัวหยุดที่ยากขึ้น'
+    };
 
-        function startGame(stageCards, isStage6 = false) {
-            mistakes = 0; // รีเซ็ตจำนวนการเปิดคู่ภาพผิดในแต่ละด่าน
-            if (currentStage === 5 || currentStage === 6) {
-                gameGrid = stageCards.map(card => [
-                    { 'name': card.name, 'img': card.img }
-                ]).flat();
-            } else {
-                const textCards = stageCards.map(card => ({ 'name': card.name, 'img': null }));
-                const imageCards = stageCards.map(card => ({ 'name': card.name, 'img': card.img }));
-                gameGrid = textCards.concat(imageCards);
-            }
-            gameGrid = gameGrid.sort(() => 0.5 - Math.random());
-            createBoard(isStage6);
+    function startGame(stageCards, isStage6 = false) {
+        mistakes = 0; // รีเซ็ตจำนวนการเปิดคู่ภาพผิดในแต่ละด่าน
+        if (currentStage === 5 || currentStage === 6) {
+            gameGrid = stageCards.map(card => [
+                { 'name': card.name, 'img': card.img }
+            ]).flat();
+        } else {
+            const textCards = stageCards.map(card => ({ 'name': card.name, 'img': null }));
+            const imageCards = stageCards.map(card => ({ 'name': card.name, 'img': card.img }));
+            gameGrid = textCards.concat(imageCards);
         }
+        gameGrid = gameGrid.sort(() => 0.5 - Math.random());
+        createBoard(isStage6);
+    }
 
-        function createBoard(isStage6 = false) {
-            gameBoard.innerHTML = '';
-            gameGrid.forEach(item => {
-                const card = document.createElement('div');
-                card.classList.add('card');
-                card.dataset.name = item.name;
+    function createBoard(isStage6 = false) {
+        gameBoard.innerHTML = '';
+        gameGrid.forEach(item => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.dataset.name = item.name;
 
-                const cardInner = document.createElement('div');
-                cardInner.classList.add('card-inner');
+            const cardInner = document.createElement('div');
+            cardInner.classList.add('card-inner');
 
-                const cardFront = document.createElement('div');
-                cardFront.classList.add('card-front');
-                const cardBack = document.createElement('div');
-                cardBack.classList.add('card-back');
-                if (item.img) {
-                    const img = document.createElement('img');
-                    img.src = item.img;
-                    if (isStage6) {
-                        cardBack.appendChild(img); // Hide the image initially
-                    } else {
-                        cardFront.appendChild(img);
-                    }
+            const cardFront = document.createElement('div');
+            cardFront.classList.add('card-front');
+            const cardBack = document.createElement('div');
+            cardBack.classList.add('card-back');
+            if (item.img) {
+                const img = document.createElement('img');
+                img.src = item.img;
+                if (isStage6) {
+                    cardBack.appendChild(img); // Hide the image initially
                 } else {
-                    cardFront.innerHTML = item.name; // Use innerHTML to render <br> tags
+                    cardFront.appendChild(img);
                 }
-
-                cardInner.appendChild(cardFront);
-                cardInner.appendChild(cardBack);
-                card.appendChild(cardInner);
-                gameBoard.appendChild(card);
-            });
-
-            // Add event listeners to the cards after they have been added to the DOM
-            document.querySelectorAll('.card').forEach(card => card.addEventListener('click', flipCard));
-        }
-
-        function flipCard() {
-            if (lockBoard) return;
-            if (this === firstCard) return;
-
-            this.classList.add('flipped');
-
-            if (!firstCard) {
-                firstCard = this;
-                return;
-            }
-
-            secondCard = this;
-            lockBoard = true;
-
-            checkForMatch();
-        }
-
-        function checkForMatch() {
-            let isMatch = firstCard.dataset.name === secondCard.dataset.name;
-
-            if (isMatch) {
-                disableCards();
             } else {
-                unflipCards();
-                mistakes++;
-                if (mistakes >= maxMistakes) {
-                    alert("คุณเปิดคู่ภาพผิดเกินจำนวนที่กำหนด! กรุณาลองใหม่อีกครั้ง");
-                    resetGame();
-                }
+                cardFront.innerHTML = item.name; // Use innerHTML to render <br> tags
             }
-        }
 
-        function disableCards() {
-            setTimeout(() => {
-                firstCard.style.visibility = 'hidden';
-                secondCard.style.visibility = 'hidden';
-
-                if (document.querySelectorAll('.card:not(.flipped)').length === 0) {
-                    nextStageButton.style.display = 'block';
-                }
-
-                resetBoard();
-            }, 1000);
-        }
-
-        function unflipCards() {
-            setTimeout(() => {
-                firstCard.classList.remove('flipped');
-                secondCard.classList.remove('flipped');
-
-                resetBoard();
-            }, 1000);
-        }
-
-        function resetBoard() {
-    [firstCard, secondCard, lockBoard] = [null, null, false];
-    document.querySelectorAll('.card').forEach(card => card.classList.remove('flipped'));
-}
-        function resetGame() {
-            mistakes = 0; // Reset mistakes counter
-            gameBoard.innerHTML = ''; // Clear the game board
-            startGame(currentStage === 6 ? stage6Cards : (currentStage === 5 ? stage5Cards : (currentStage === 4 ? stage4Cards : (currentStage === 3 ? stage3Cards : (currentStage === 2 ? stage2Cards : stage1Cards))))); // Reset the game board
-        }
-
-        nextStageButton.addEventListener('click', () => {
-            currentStage++;
-            nextStageButton.style.display = 'none';
-            if (currentStage <= 6) {
-                showModal();
-            } else {
-                alert("คุณผ่านทุกด่านแล้วเย้ยยย!");
-            }
+            cardInner.appendChild(cardFront);
+            cardInner.appendChild(cardBack);
+            card.appendChild(cardInner);
+            gameBoard.appendChild(card);
         });
 
-        function showModal() {
-            modal.style.display = 'block';
-            stageInfo.innerHTML = stageDescriptions[currentStage];
+        // Add event listeners to the cards after they have been added to the DOM
+        document.querySelectorAll('.card').forEach(card => card.addEventListener('click', flipCard));
+    }
+
+    function flipCard() {
+        if (lockBoard) return;
+        if (this === firstCard) return;
+
+        this.classList.add('flipped');
+
+        if (!firstCard) {
+            firstCard = this;
+            return;
         }
 
-        closeModal.onclick = function() {
-            modal.style.display = 'none';
-        }
+        secondCard = this;
+        lockBoard = true;
 
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = 'none';
+        checkForMatch();
+    }
+
+    function checkForMatch() {
+        let isMatch = firstCard.dataset.name === secondCard.dataset.name;
+
+        if (isMatch) {
+            disableCards();
+        } else {
+            unflipCards();
+            mistakes++;
+            if (mistakes >= maxMistakes) {
+                alert("คุณเปิดคู่ภาพผิดเกินจำนวนที่กำหนด! กรุณาลองใหม่อีกครั้ง");
+                resetGame();
             }
         }
+    }
 
-        startGameButton.addEventListener('click', () => {
-            modal.style.display = 'none';
-            if (currentStage === 1) {
-                startGame(stage1Cards);
-            } else if (currentStage === 2) {
-                startGame(stage2Cards);
-                alert("ไปด่าน 2 กันเลยยย!");
-            } else if (currentStage === 3) {
-                startGame(stage3Cards);
-                alert("ไปด่าน 3 กันเลยยย!");
-            } else if (currentStage === 4) {
-                startGame(stage4Cards);
-                alert("ไปด่าน 4 กันเลยยย!");
-            } else if (currentStage === 5) {
-                startGame(stage5Cards);
-                alert("ไปด่าน 5 กันเลยยย!");
-            } else if (currentStage === 6) {
-                startGame(stage6Cards, true);
-                alert("ไปด่าน 6 กันเลยยย!");
+    function disableCards() {
+        setTimeout(() => {
+            firstCard.style.visibility = 'hidden';
+            secondCard.style.visibility = 'hidden';
+
+            if (document.querySelectorAll('.card:not(.flipped)').length === 0) {
+                nextStageButton.style.display = 'block';
             }
-        });
 
-        showModal(); // Show modal for stage 1 when the game loads
-    </script>
+            resetBoard();
+        }, 1000);
+    }
+
+    function unflipCards() {
+        setTimeout(() => {
+            firstCard.classList.remove('flipped');
+            secondCard.classList.remove('flipped');
+
+            resetBoard();
+        }, 1000);
+    }
+
+    function resetBoard() {
+        [firstCard, secondCard, lockBoard] = [null, null, false];
+    }
+
+    function resetGame() {
+        mistakes = 0; // Reset mistakes counter
+        gameBoard.innerHTML = ''; // Clear the game board
+        startGame(currentStage === 6 ? stage6Cards : (currentStage === 5 ? stage5Cards : (currentStage === 4 ? stage4Cards : (currentStage === 3 ? stage3Cards : (currentStage === 2 ? stage2Cards : stage1Cards))))); // Reset the game board
+    }
+
+    nextStageButton.addEventListener('click', () => {
+        currentStage++;
+        nextStageButton.style.display = 'none';
+        if (currentStage <= 6) {
+            showModal();
+        } else {
+            alert("คุณผ่านทุกด่านแล้วเย้ยยย!");
+        }
+    });
+
+    function showModal() {
+        modal.style.display = 'block';
+        stageInfo.innerHTML = stageDescriptions[currentStage];
+    }
+
+    closeModal.onclick = function() {
+        modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    startGameButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+        if (currentStage === 1) {
+            startGame(stage1Cards);
+        } else if (currentStage === 2) {
+            startGame(stage2Cards);
+            alert("ไปด่าน 2 กันเลยยย!");
+        } else if (currentStage === 3) {
+            startGame(stage3Cards);
+            alert("ไปด่าน 3 กันเลยยย!");
+        } else if (currentStage === 4) {
+            startGame(stage4Cards);
+            alert("ไปด่าน 4 กันเลยยย!");
+        } else if (currentStage === 5) {
+            startGame(stage5Cards);
+            alert("ไปด่าน 5 กันเลยยย!");
+        } else if (currentStage === 6) {
+            startGame(stage6Cards, true);
+            alert("ไปด่าน 6 กันเลยยย!");
+        }
+    });
+
+    showModal(); // Show modal for stage 1 when the game loads
+</script>
 </body>
 </html>
+```
