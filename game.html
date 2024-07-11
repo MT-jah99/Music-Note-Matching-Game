@@ -377,13 +377,12 @@
 
         function resetBoard() {
             [firstCard, secondCard, lockBoard] = [null, null, false];
-            document.querySelectorAll('.card').forEach(card => card.classList.remove('flipped'));
         }
 
         function resetGame() {
             mistakes = 0; // Reset mistakes counter
-            resetBoard();
-            startGame(currentStage === 6 ? stage6Cards : (currentStage === 5 ? stage5Cards : (currentStage === 4 ? stage4Cards : (currentStage === 3 ? stage3Cards : (currentStage === 2 ? stage2Cards : stage1Cards))))); // Reset the game board
+            gameBoard.innerHTML = ''; // Clear the game board
+            startGame(currentStage === 6 ? stage6Cards : (currentStage === 5 ? stage5Cards : (currentStage === 4 ? stage4Cards : (currentStage === 3 ? stage3Cards : (currentStage === 2 ? stage2Cards : stage1Cards)))), currentStage === 6); // Reset the game board
         }
 
         nextStageButton.addEventListener('click', () => {
