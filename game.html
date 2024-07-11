@@ -101,9 +101,6 @@
             cursor: pointer;
             font-size: 16px;
             display: none;
-            position: relative;
-            left: 50%;
-            transform: translateX(-50%);
         }
 
         .next-stage:hover {
@@ -397,7 +394,9 @@
 
         startGameButton.addEventListener('click', () => {
             modal.style.display = 'none';
-            if (currentStage === 2) {
+            if (currentStage === 1) {
+                startGame(stage1Cards);
+            } else if (currentStage === 2) {
                 startGame(stage2Cards);
                 alert("ไปด่าน 2 กันเลยยย!");
             } else if (currentStage === 3) {
@@ -415,7 +414,7 @@
             }
         });
 
-        startGame(stage1Cards);
+        showModal(); // Show modal for stage 1 when the game loads
     </script>
 </body>
 </html>
