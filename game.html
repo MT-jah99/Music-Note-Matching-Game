@@ -18,6 +18,12 @@
             color: #333;
         }
 
+        .score-board {
+            margin: 20px 0;
+            font-size: 18px;
+            color: #333;
+        }
+
         .game-board {
             display: flex;
             flex-wrap: wrap;
@@ -180,6 +186,9 @@
 </head>
 <body>
     <h1>Music Note Matching Game <br> (เกมส์จับคู่โน้ต)</h1>
+    <div class="score-board" id="scoreBoard">
+        คะแนนสะสม: 0
+    </div>
     <div class="game-board" id="gameBoard">
         <!-- Cards will be dynamically generated here -->
     </div>
@@ -204,7 +213,7 @@
             { 'name': 'โน้ตตัวดำ', 'img': 'https://i.ibb.co/zsycKvy/image.jpg' },
             { 'name': 'โน้ตตัวเขบ็ต1ชั้น', 'img': 'https://i.ibb.co/VvDhnSh/1.jpg' },
             { 'name': 'โน้ตตัวเขบ็ต2ชั้น', 'img': 'https://i.ibb.co/zVFP0Gz/2.jpg' },
-            { 'name': 'โน้ตตัวตัวขาว<br>ประจุด', 'img': 'https://i.ibb.co/y5M3Q36/image.jpg' }
+            { 'name': 'โน้ตตัวตัวขาวประจุด', 'img': 'https://i.ibb.co/y5M3Q36/image.jpg' }
         ];
 
         const stage2Cards = [
@@ -254,12 +263,14 @@
         let lockBoard = false;
         let mistakes = 0;
         const maxMistakes = 5; // ตั้งค่าสูงสุดของการเปิดคู่ภาพผิด
+        let score = 0; // ตัวแปรสำหรับคะแนนสะสม
         const gameBoard = document.getElementById('gameBoard');
         const nextStageButton = document.getElementById('nextStageButton');
         const modal = document.getElementById('myModal');
         const closeModal = document.getElementsByClassName('close')[0];
         const stageInfo = document.getElementById('stageInfo');
         const startGameButton = document.getElementById('startGameButton');
+        const scoreBoard = document.getElementById('scoreBoard');
 
         const stageDescriptions = {
             1: 'ด่านที่ 1: ให้นักเรียนจับคู่ชื่อตัวโน้ตภาษาไทยกับรูปภาพตัวโน้ต',
@@ -343,9 +354,13 @@
 
             if (isMatch) {
                 disableCards();
+                score += 10; // เพิ่มคะแนนเมื่อจับคู่ได้ถูกต้อง
+                updateScore();
             } else {
                 unflipCards();
                 mistakes++;
+                score -= 5; // ลบคะแนนเมื่อจับคู่ผิด
+                updateScore();
                 if (mistakes >= maxMistakes) {
                     alert("คุณเปิดคู่ภาพผิดเกินจำนวนที่กำหนด! กรุณาลองใหม่อีกครั้ง");
                     resetGame();
@@ -383,6 +398,10 @@
             mistakes = 0; // Reset mistakes counter
             gameBoard.innerHTML = ''; // Clear the game board
             startGame(currentStage === 6 ? stage6Cards : (currentStage === 5 ? stage5Cards : (currentStage === 4 ? stage4Cards : (currentStage === 3 ? stage3Cards : (currentStage === 2 ? stage2Cards : stage1Cards)))), currentStage === 6); // Reset the game board
+        }
+
+        function updateScore() {
+            scoreBoard.innerHTML = `คะแนนสะสม: ${score}`;
         }
 
         nextStageButton.addEventListener('click', () => {
