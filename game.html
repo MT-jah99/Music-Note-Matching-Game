@@ -187,7 +187,8 @@
 <body>
     <h1>Music Note Matching Game <br> (เกมส์จับคู่โน้ต)</h1>
     <div class="score-board" id="scoreBoard">
-        คะแนนสะสม: 0 / 360
+        คะแนนสะสม: 0 / 360<br>
+        ความผิดพลาด: 0 / 5
     </div>
     <div class="game-board" id="gameBoard">
         <!-- Cards will be dynamically generated here -->
@@ -399,7 +400,7 @@
         }
 
         function updateScore() {
-            scoreBoard.innerHTML = `คะแนนสะสม: ${Math.max(score, 0)} / ${maxScore}`;
+            scoreBoard.innerHTML = `คะแนนสะสม: ${Math.max(score, 0)} / ${maxScore}<br>ความผิดพลาด: ${mistakes} / ${maxMistakes}`;
         }
 
         nextStageButton.addEventListener('click', () => {
