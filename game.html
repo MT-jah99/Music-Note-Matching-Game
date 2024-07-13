@@ -13,15 +13,45 @@
             padding: 0;
         }
 
-        h1 {
-            margin: 20px 0;
+        .header-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+        }
+
+        .header-text {
+            margin: 0;
             color: #333;
         }
 
         .score-board {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             margin: 20px 0;
             font-size: 18px;
             color: #333;
+        }
+
+        .score, .mistakes {
+            margin: 0 10px;
+            padding: 10px 20px;
+            border-radius: 5px;
+        }
+
+        .score {
+            background-color: #4CAF50; /* Green */
+            color: white;
+        }
+
+        .mistakes {
+            background-color: #FFC107; /* Amber */
+            color: white;
         }
 
         .game-board {
@@ -185,10 +215,12 @@
     </style>
 </head>
 <body>
-    <h1>Music Note Matching Game <br> (เกมส์จับคู่โน้ต)</h1>
+    <div class="header-container">
+        <h1 class="header-text">Music Note Matching Game <br> (เกมส์จับคู่โน้ต)</h1>
+    </div>
     <div class="score-board" id="scoreBoard">
-        คะแนนสะสม: 0 / 360<br>
-        ความผิดพลาด: 0 / 5
+        <div class="score">คะแนนสะสม: 0 / 360</div>
+        <div class="mistakes">ความผิดพลาด: 0 / 5</div>
     </div>
     <div class="game-board" id="gameBoard">
         <!-- Cards will be dynamically generated here -->
@@ -400,7 +432,10 @@
         }
 
         function updateScore() {
-            scoreBoard.innerHTML = `คะแนนสะสม: ${Math.max(score, 0)} / ${maxScore}<br>ความผิดพลาด: ${mistakes} / ${maxMistakes}`;
+            scoreBoard.innerHTML = `
+                <div class="score">คะแนนสะสม: ${Math.max(score, 0)} / ${maxScore}</div>
+                <div class="mistakes">ความผิดพลาด: ${mistakes} / ${maxMistakes}</div>
+            `;
         }
 
         nextStageButton.addEventListener('click', () => {
