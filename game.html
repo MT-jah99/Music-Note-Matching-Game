@@ -187,7 +187,7 @@
 <body>
     <h1>Music Note Matching Game <br> (เกมส์จับคู่โน้ต)</h1>
     <div class="score-board" id="scoreBoard">
-        คะแนนสะสม: 0
+        คะแนนสะสม: 0 / 360
     </div>
     <div class="game-board" id="gameBoard">
         <!-- Cards will be dynamically generated here -->
@@ -256,6 +256,7 @@
 
         const stage6Cards = stage5Cards;
 
+        const maxScore = 360; // คะแนนเต็ม
         let currentStage = 1;
         let gameGrid;
         let firstCard = null;
@@ -359,11 +360,14 @@
             } else {
                 unflipCards();
                 mistakes++;
-                score -= 5; // ลบคะแนนเมื่อจับคู่ผิด
-                updateScore();
+                if (mistakes < maxMistakes) {
+                    score -= 5; // ลบคะแนนเมื่อจับคู่ผิด
+                    updateScore();
+                }
                 if (mistakes >= maxMistakes) {
                     alert("คุณเปิดคู่ภาพผิดเกินจำนวนที่กำหนด! กรุณาลองใหม่อีกครั้ง");
-                    resetGame();
+                    resetBoard(); // Reset the board without resetting the score
+                    startGame(currentStage === 6 ? stage6Cards : (currentStage === 5 ? stage5Cards : (currentStage === 4 ? stage4Cards : (currentStage === 3 ? stage3Cards : (currentStage === 2 ? stage2Cards : stage1Cards)))), currentStage === 6); // Reset the game board
                 }
             }
         }
@@ -394,14 +398,8 @@
             [firstCard, secondCard, lockBoard] = [null, null, false];
         }
 
-        function resetGame() {
-            mistakes = 0; // Reset mistakes counter
-            gameBoard.innerHTML = ''; // Clear the game board
-            startGame(currentStage === 6 ? stage6Cards : (currentStage === 5 ? stage5Cards : (currentStage === 4 ? stage4Cards : (currentStage === 3 ? stage3Cards : (currentStage === 2 ? stage2Cards : stage1Cards)))), currentStage === 6); // Reset the game board
-        }
-
         function updateScore() {
-            scoreBoard.innerHTML = `คะแนนสะสม: ${score}`;
+            scoreBoard.innerHTML = `คะแนนสะสม: ${Math.max(score, 0)} / ${maxScore}`;
         }
 
         nextStageButton.addEventListener('click', () => {
@@ -415,8 +413,12 @@
         });
 
         function showModal() {
-            modal.style.display = 'block';
-            stageInfo.innerHTML = stageDescriptions[currentStage];
+            if (currentStage <= 6) {
+                modal.style.display = 'block';
+                stageInfo.innerHTML = stageDescriptions[currentStage];
+            } else {
+                alert("คุณผ่านทุกด่านแล้วเย้ยยย!");
+            }
         }
 
         closeModal.onclick = function() {
