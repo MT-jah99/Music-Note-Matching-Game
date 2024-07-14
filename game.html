@@ -255,11 +255,10 @@
     <div id="summaryModal" class="modal">
         <div class="modal-content">
             <span class="close">&times;</span>
-            <h2>สรุปเวลาที่ใช้</h2>
+            <h2>สรุปผลคะแนน</h2>
             <div id="summaryInfo">
                 <!-- Summary will be dynamically generated here -->
             </div>
-            <button id="restartGameButton">Restart Game</button>
         </div>
     </div>
 
@@ -331,12 +330,10 @@
         const stageInfo = document.getElementById('stageInfo');
         const summaryInfo = document.getElementById('summaryInfo');
         const startGameButton = document.getElementById('startGameButton');
-        const restartGameButton = document.getElementById('restartGameButton');
         const scoreBoard = document.getElementById('scoreBoard');
         const timerElement = document.getElementById('timer');
         let startTime;
         let timerInterval;
-        let stageTimes = [];
 
         const stageDescriptions = {
             1: 'ด่านที่ 1: ให้นักเรียนจับคู่ชื่อตัวโน้ตภาษาไทยกับรูปภาพตัวโน้ต',
@@ -349,7 +346,9 @@
 
         function startGame(stageCards, isStage6 = false) {
             mistakes = 0;
-            startTimer();
+            if (!timerInterval) {
+                startTimer();
+            }
             if (currentStage === 5 || currentStage === 6) {
                 gameGrid = stageCards.map(card => [
                     { 'name': card.name, 'img': card.img }
@@ -444,7 +443,6 @@
 
                 if (document.querySelectorAll('.card:not(.flipped)').length === 0) {
                     nextStageButton.style.display = 'block';
-                    recordStageTime();
                 }
 
                 resetBoard();
@@ -513,28 +511,15 @@
                 startGame(stage1Cards);
             } else if (currentStage === 2) {
                 startGame(stage2Cards);
-                alert("ไปด่าน 2 กันเลยยย!");
             } else if (currentStage === 3) {
                 startGame(stage3Cards);
-                alert("ไปด่าน 3 กันเลยยย!");
             } else if (currentStage === 4) {
                 startGame(stage4Cards);
-                alert("ไปด่าน 4 กันเลยยย!");
             } else if (currentStage === 5) {
                 startGame(stage5Cards);
-                alert("ไปด่าน 5 กันเลยยย!");
             } else if (currentStage === 6) {
                 startGame(stage6Cards, true);
-                alert("ไปด่าน 6 กันเลยยย!");
             }
-        });
-
-        restartGameButton.addEventListener('click', () => {
-            summaryModal.style.display = 'none';
-            currentStage = 1;
-            score = 0;
-            stageTimes = [];
-            showModal();
         });
 
         function startTimer() {
@@ -550,11 +535,6 @@
             }, 1000);
         }
 
-        function recordStageTime() {
-            clearInterval(timerInterval);
-            stageTimes.push(timerElement.textContent);
-        }
-
         function parseTimeString(timeString) {
             const [minutes, seconds] = timeString.split(':').map(Number);
             return minutes * 60 + seconds;
@@ -568,7 +548,9 @@
 
         function showSummary() {
             summaryModal.style.display = 'block';
-            const totalSeconds = stageTimes.reduce((acc, time) => acc + parseTimeString(time), 0);
+            const now = new Date();
+            const elapsedTime = new Date(now - startTime);
+            const totalSeconds = (elapsedTime.getUTCMinutes() * 60) + elapsedTime.getUTCSeconds();
             const totalTimeString = formatTimeString(totalSeconds);
             let summaryHtml = `<p>เวลารวมที่ใช้: ${totalTimeString}</p>`;
             summaryHtml += `<p>คะแนนสะสม: ${score} / ${maxScore}</p>`;
