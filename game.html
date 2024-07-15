@@ -334,6 +334,7 @@
         const timerElement = document.getElementById('timer');
         let startTime;
         let timerInterval;
+        let elapsedTime = 0; // เก็บเวลาที่ผ่านมาแล้วในหน่วยวินาที
 
         const stageDescriptions = {
             1: 'ด่านที่ 1: ให้นักเรียนจับคู่ชื่อตัวโน้ตภาษาไทยกับรูปภาพตัวโน้ต',
@@ -346,9 +347,14 @@
 
         function startGame(stageCards, isStage6 = false) {
             mistakes = 0;
-            if (!timerInterval) {
-                startTimer();
-            }
+            firstCard = null;
+            secondCard = null;
+            lockBoard = false;
+            scoreBoard.innerHTML = `
+                <div class="score">คะแนนสะสม: ${Math.max(score, 0)} / ${maxScore}</div>
+                <div class="mistakes">ความผิดพลาด: ${mistakes} / ${maxMistakes}</div>
+                <div class="timer" id="timer">${timerElement.textContent}</div>
+            `;
             if (currentStage === 5 || currentStage === 6) {
                 gameGrid = stageCards.map(card => [
                     { 'name': card.name, 'img': card.img }
@@ -443,6 +449,7 @@
 
                 if (document.querySelectorAll('.card:not(.flipped)').length === 0) {
                     nextStageButton.style.display = 'block';
+                    stopTimer(); // หยุดจับเวลาเมื่อผู้เล่นจับคู่ครบ
                 }
 
                 resetBoard();
@@ -507,19 +514,8 @@
 
         startGameButton.addEventListener('click', () => {
             modal.style.display = 'none';
-            if (currentStage === 1) {
-                startGame(stage1Cards);
-            } else if (currentStage === 2) {
-                startGame(stage2Cards);
-            } else if (currentStage === 3) {
-                startGame(stage3Cards);
-            } else if (currentStage === 4) {
-                startGame(stage4Cards);
-            } else if (currentStage === 5) {
-                startGame(stage5Cards);
-            } else if (currentStage === 6) {
-                startGame(stage6Cards, true);
-            }
+            startGame(currentStage === 6 ? stage6Cards : (currentStage === 5 ? stage5Cards : (currentStage === 4 ? stage4Cards : (currentStage === 3 ? stage3Cards : (currentStage === 2 ? stage2Cards : stage1Cards)))), currentStage === 6);
+            startTimer(); // เริ่มจับเวลาใหม่เมื่อผู้เล่นเริ่มด่านใหม่
         });
 
         function startTimer() {
@@ -527,12 +523,21 @@
             startTime = new Date();
             timerInterval = setInterval(() => {
                 const now = new Date();
-                const elapsedTime = new Date(now - startTime);
-                const minutes = String(elapsedTime.getUTCMinutes()).padStart(1, '0');
-                const seconds = String(elapsedTime.getUTCSeconds()).padStart(2, '0');
+                const totalElapsedTime = elapsedTime + Math.floor((now - startTime) / 1000);
+                const minutes = String(Math.floor(totalElapsedTime / 60)).padStart(1, '0');
+                const seconds = String(totalElapsedTime % 60).padStart(2, '0');
                 timerElement.textContent = `${minutes}:${seconds}`;
                 updateScore();
             }, 1000);
+        }
+
+        function stopTimer() {
+            if (timerInterval) {
+                const now = new Date();
+                elapsedTime += Math.floor((now - startTime) / 1000); // เพิ่มเวลาที่ผ่านไปในรอบนี้เข้าไปใน elapsedTime
+                clearInterval(timerInterval);
+                timerInterval = null;
+            }
         }
 
         function parseTimeString(timeString) {
@@ -549,8 +554,7 @@
         function showSummary() {
             summaryModal.style.display = 'block';
             const now = new Date();
-            const elapsedTime = new Date(now - startTime);
-            const totalSeconds = (elapsedTime.getUTCMinutes() * 60) + elapsedTime.getUTCSeconds();
+            const totalSeconds = elapsedTime;
             const totalTimeString = formatTimeString(totalSeconds);
             let summaryHtml = `<p>เวลารวมที่ใช้: ${totalTimeString}</p>`;
             summaryHtml += `<p>คะแนนสะสม: ${score} / ${maxScore}</p>`;
